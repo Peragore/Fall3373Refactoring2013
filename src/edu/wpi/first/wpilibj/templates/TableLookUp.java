@@ -6,7 +6,7 @@ package edu.wpi.first.wpilibj.templates;
 import java.util.Hashtable;
 
 /**
- *
+ * Helper class to decide what elevation should be fed to the elevator in order to shoot
  * @author Jamie Dyer
  */
 public class TableLookUp {
