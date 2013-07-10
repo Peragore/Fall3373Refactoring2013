@@ -235,12 +235,12 @@ public class Team3373 extends SimpleRobot{
             arm.demoStatus = 0;
             elevator.elevationTarget = elevator.angleMeter.getVoltage();
             cameraControl.servoTarget = .79;
-            objShooter.busyStatus = true;
+            objShooter.isNotRunning = true;
             camera.distanceFlag = false;
             controlFlag = true;
             autonomousElevateFlag = true;
-            objShooter.stageOneTalon.set(0);
-            objShooter.stageTwoTalon.set(0);
+            objShooter.firstMotorTalon.set(0);
+            objShooter.secondMotorTalon.set(0);
             camera.distFlag = false;
             elevator.elevatorTalon1.set(0);
             elevator.elevatorTalon2.set(0);
@@ -315,9 +315,9 @@ public class Team3373 extends SimpleRobot{
         SmartDashboard.putNumber("Voltage", elevator.angleMeter.getVoltage());
         SmartDashboard.putNumber("Target Voltage: ", lookUp.lookUpAngle(camera.middle_distance, targetSlot, targetAngle));
         SmartDashboard.putNumber("Current Voltage: ", elevator.currentAngle);
-        SmartDashboard.putBoolean("Shooting: ", objShooter.busyStatus);
+        SmartDashboard.putBoolean("Shooting: ", objShooter.isNotRunning);
         SmartDashboard.putNumber("Current Voltage: ", elevator.currentAngle);
-        SmartDashboard.putBoolean("Shooting: ", objShooter.busyStatus);
+        SmartDashboard.putBoolean("Shooting: ", objShooter.isNotRunning);
         SmartDashboard.putNumber("Servo: ", cameraControl.cameraServo.get());
         LCD.updateLCD();
     }
@@ -349,7 +349,7 @@ public class Team3373 extends SimpleRobot{
             elevator.goTo(lookUp.lookUpAngle(camera.middle_distance, targetSlot, targetAngle));    
         }
 
-        if (shooterController.isAPushed() && objShooter.busyStatus){ //shoots the frisbee  
+        if (shooterController.isAPushed() && objShooter.isNotRunning){ //shoots the frisbee  
             objShooter.shooterThread();
         }
 
