@@ -49,7 +49,6 @@ public class Team3373 extends SimpleRobot{
    double rotateLimitMaximum = 4.8;//are these used?
    double rotateLimitMinimum = 0.2;//are these used?
    Drive drive = Drive.getInstance();
-   Deadband deadband = new Deadband();
    NewMath newMath = new NewMath();
    TableLookUp lookUp = new TableLookUp();
    boolean test;
@@ -369,9 +368,9 @@ public class Team3373 extends SimpleRobot{
     public void teleopDrive() {
         drive.setSpeed(driveStick.isLBHeld(), driveStick.isRBHeld()); //sniper/turbo
         drive.drive( //controls driving
-                    newMath.pow(deadband.zero(driveStick.getRawAxis(LX), 0.1), 3), 
-                    newMath.pow(deadband.zero(driveStick.getRawAxis(RX), 0.1), 3), 
-                    newMath.pow(deadband.zero(driveStick.getRawAxis(LY), 0.1), 3)
+                    newMath.pow(driveStick.deadband(driveStick.getRawAxis(LX), 0.1), 3), 
+                    newMath.pow(driveStick.deadband(driveStick.getRawAxis(RX), 0.1), 3), 
+                    newMath.pow(driveStick.deadband(driveStick.getRawAxis(LY), 0.1), 3)
                    );
     }
     

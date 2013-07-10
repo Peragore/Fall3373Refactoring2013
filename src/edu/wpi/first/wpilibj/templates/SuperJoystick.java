@@ -6,7 +6,8 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
- *
+ * Adds onto the provided Joystick class, 
+ * Button checking and deadband
  * @author Jamie
  */
 public class SuperJoystick extends Joystick{
@@ -193,6 +194,17 @@ public class SuperJoystick extends Joystick{
         } else {
             return false;
         }
+    }
+    
+    //takes an input and makes sure it passes certain thresholds before returning input
+    public double deadband(double input, double range){
+        
+        if(input > -range && input < range){
+            return 0.00;
+        } else {
+            return input;
+        }
+        
     }
     
     public void clearButtons(){
