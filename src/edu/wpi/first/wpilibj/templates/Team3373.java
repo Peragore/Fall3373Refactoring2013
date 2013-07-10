@@ -120,7 +120,7 @@ public class Team3373 extends SimpleRobot{
    
    public void autonomous() {
         
-        cameraControl.moveTest(0); //moves camera to an upward position in prep for teleop
+        cameraControl.moveCamera(0); //moves camera to an upward position in prep for teleop
         
         if (isAutonomous() && isEnabled()){
             elevator.canRun = true;
@@ -323,7 +323,7 @@ public class Team3373 extends SimpleRobot{
     
     //automatically finds distance from camera
     public void teleopDistanceFinding() {
-        cameraControl.moveTest(-shooterController.getRawAxis(LY));
+        cameraControl.moveCamera(-shooterController.getRawAxis(LY));
 
         if (shooterController.isStartPushed()){
             camera.findDist();
