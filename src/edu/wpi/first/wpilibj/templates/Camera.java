@@ -32,6 +32,8 @@ import java.util.Hashtable;
  * chain (open it with the Vision Assistant)
  */
 
+//TODO: Get some form of vision code working
+
 public class Camera {
     
     ColorImage image = null; //moved up her

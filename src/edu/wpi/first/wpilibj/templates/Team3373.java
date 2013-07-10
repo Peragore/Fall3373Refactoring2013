@@ -2,7 +2,13 @@
 /* Copyright (c) FIRST 2008. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
+/* the project.   
+ * 
+ */
+
+
+/* This is the main class the that all other code flows through. It controls 
+* Robot operation in autonomous, teleoperated, and test modes.
 /*----------------------------------------------------------------------------*/
 
 package edu.wpi.first.wpilibj.templates;
@@ -13,9 +19,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.lang.Math;
 import edu.wpi.first.wpilibj.IterativeRobot;
-//import edu.wpi.first.wpilibj.RobotDrive;
-//import edu.wpi.first.wpilibj.SimpleRobot;
-//import edu.wpi.first.wpilibj.templates.Shooter;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the SimpleRobot
@@ -82,20 +86,27 @@ public class Team3373 extends SimpleRobot{
    double manualStatus;
    boolean armTestFlag;
    boolean canShoot;
-   int LX = 1;
-   int LY = 2;
-   int Triggers = 3;
-   int RX = 4;
-   int RY = 5;
-   int DP = 6;
+   
+   static int LX = 1;
+   static int LY = 2;
+   static int Triggers = 3;
+   static int RX = 4;
+   static int RY = 5;
+   static int DP = 6;
+   
    double rotateTest = 2.7;
+   
    double autonomousSpeedTarget = 1;
    boolean autonomousElevateFlag = true;
+   
    double feedAngle = 2.8;
    double climbAngle = 3.105;
+   
    double autoTarget;
    double[] targetSlot;
    double[] targetAngle;
+   
+
    
    //double climbingPosition = 2.75;
    boolean controlFlag = true;
@@ -109,7 +120,9 @@ public class Team3373 extends SimpleRobot{
     ********************************/
    
    public void autonomous() {
+        
         cameraControl.moveTest(0); //moves camera to an upward position in prep for teleop
+        
         if (isAutonomous() && isEnabled()){
             elevator.canRun = true;
             camera.canRun = true;
@@ -125,16 +138,19 @@ public class Team3373 extends SimpleRobot{
    
     //checks whether the robot is at the front or back of the pyramid
     public void autoPositionChecker() {
+        
         if (frontBackSwitch.get()){ //further away, right side, value returned is also feed/climb position
             autoTarget = lookUp.lookUpAngle(18, lookUp.distanceHigh, lookUp.angleHigh);
         } 
         else { //close, right
             autoTarget = lookUp.lookUpAngle(10, lookUp.distanceHigh, lookUp.angleHigh);
         }
+        
     }
     //brings elevator to shooting position in Autonomous
     public void autoElevateToShoot(){ 
         while (autonomousElevateFlag) {
+            
             try {
                 Thread.sleep(10L);
             } 
@@ -154,6 +170,7 @@ public class Team3373 extends SimpleRobot{
     
     //smoothely accelerates the shooter wheel to max speed over a period of time
     public void autoSmoothShooterAccel() {
+       
         objShooter.goToSpeed(autonomousSpeedTarget*.33);
 
         try {
@@ -163,11 +180,13 @@ public class Team3373 extends SimpleRobot{
         }
 
         objShooter.goToSpeed(autonomousSpeedTarget * .66);
+        
         try {
             Thread.sleep(300L);
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
+        
         objShooter.goToSpeed(autonomousSpeedTarget);
         
         //waits for the speed to stabilize
@@ -181,7 +200,9 @@ public class Team3373 extends SimpleRobot{
     //Shoots the frisbee in autonomous three times
     public void autoShoot() {
         for (int i = 0; i <= 2; i++){
+            
             objShooter.shoot();
+            
             try {
                 Thread.sleep(2000L);
             } catch (InterruptedException ex) {
@@ -189,6 +210,7 @@ public class Team3373 extends SimpleRobot{
             }
 
             objShooter.loadFrisbee(elevator);
+            
             try {
                 Thread.sleep(1500);
             } catch (InterruptedException ex) {
@@ -196,11 +218,6 @@ public class Team3373 extends SimpleRobot{
             }
         }
     }
-    
-
-   
-
-    
 
     /**
      * This function is called once each time the robot enters operator control.
@@ -239,39 +256,38 @@ public class Team3373 extends SimpleRobot{
     **********************************/
     public void operatorControl() {
             
-            teleopInit();
-            
-            while (isOperatorControl() & isEnabled()){
-                //TODO: Test if actually does anything whatsoever 
-                try {
-                     Thread.sleep(10L);
-                 } catch (InterruptedException ex) {
-                     ex.printStackTrace();
-                 }
+        teleopInit();
 
-                 //Resets the internal toggle flags when a previously pushed button has been released
-                 driveStick.clearButtons();
-                 shooterController.clearButtons();
+        while (isOperatorControl() & isEnabled()){
+            //TODO: Test if actually does anything whatsoever 
+            try {
+                 Thread.sleep(10L);
+             } catch (InterruptedException ex) {
+                 ex.printStackTrace();
+             }
 
-                 outputToSmartDashboard();
-                 
-                 //shooter code
-                 teleopDistanceFinding();
-                 teleopShootAndElevateControl();
+             //Resets the internal toggle flags when a previously pushed button has been released
+             driveStick.clearButtons();
+             shooterController.clearButtons();
 
-                 teleopDrive();
+             outputToSmartDashboard();
 
-                 teleopFeedFrisbees();
+             //shooter code
+             teleopDistanceFinding();
+             teleopShootAndElevateControl();
 
-                 teleopClimb();
+             teleopDrive();
 
-                 //Testing for string Potentiometer
-                 double stringPotVoltage;
-                 stringPotVoltage = elevator.stringPot.getVoltage();
-                 System.out.println(stringPotVoltage);
+             teleopFeedFrisbees();
+
+             teleopClimb();
+
+             //Testing for string Potentiometer
+             double stringPotVoltage;
+             stringPotVoltage = elevator.stringPot.getVoltage();
+             System.out.println(stringPotVoltage);
 
         }
-
     }  
     
     public void teleopInit() {
@@ -353,9 +369,9 @@ public class Team3373 extends SimpleRobot{
     public void teleopDrive() {
         drive.setSpeed(driveStick.isLBHeld(), driveStick.isRBHeld()); //sniper/turbo
         drive.drive( //controls driving
-                    newMath.toTheThird(deadband.zero(driveStick.getRawAxis(LX), 0.1)), 
-                    newMath.toTheThird(deadband.zero(driveStick.getRawAxis(RX), 0.1)), 
-                    newMath.toTheThird(deadband.zero(driveStick.getRawAxis(LY), 0.1))
+                    newMath.pow(deadband.zero(driveStick.getRawAxis(LX), 0.1), 3), 
+                    newMath.pow(deadband.zero(driveStick.getRawAxis(RX), 0.1), 3), 
+                    newMath.pow(deadband.zero(driveStick.getRawAxis(LY), 0.1), 3)
                    );
     }
     
